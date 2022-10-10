@@ -1,12 +1,18 @@
+# Libraries
 
+This system uses a modified version of the Arduino Uno, optimized for MakeBlock Libraries. Hence, we are using the following libraries:
+- [MakeBlock Libraries](https://github.com/Makeblock-official/Makeblock-Libraries)
+
+## `lib` directory
 This directory is intended for project specific (private) libraries.
 PlatformIO will compile them to static libraries and link into executable file.
 
 The source code of each library should be placed in a an own separate directory
-("lib/your_library_name/[here are source files]").
+(`lib/your_library_name/[here are source files]`).
 
 For example, see a structure of the following two libraries `Foo` and `Bar`:
 
+```
 |--lib
 |  |
 |  |--Bar
@@ -26,9 +32,10 @@ For example, see a structure of the following two libraries `Foo` and `Bar`:
 |- platformio.ini
 |--src
    |- main.c
+```
 
 and a contents of `src/main.c`:
-```
+```c
 #include <Foo.h>
 #include <Bar.h>
 
@@ -36,7 +43,6 @@ int main (void)
 {
   ...
 }
-
 ```
 
 PlatformIO Library Dependency Finder will find automatically dependent

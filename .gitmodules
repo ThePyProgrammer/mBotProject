@@ -1,0 +1,6 @@
+[submodule "lib/Makeblock-Libraries"]
+	path = lib/Makeblock-Libraries
+	url = https://github.com/Makeblock-official/Makeblock-Libraries
+[submodule "python/mbotlib"]
+	path = python/mbotlib
+	url = https://github.com/xeecos/python-for-mbot
