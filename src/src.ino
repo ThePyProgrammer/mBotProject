@@ -1,5 +1,3 @@
-#include <Arduino.h>
-
 // INSERT ALL YOUR MAIN LOOP CODE HERE :)
 
 void setup() {
