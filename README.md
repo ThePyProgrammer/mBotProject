@@ -20,6 +20,7 @@ $ code <project-folder-name>
 ```
 
 ### Installing Platform.IO
+(in case you want to use the superior choice)
 ![](img/docs/vsc-ext.png)
 
 Click on the "Extensions" Tab on the Side Bar and search for "*PlatformIO IDE*".
