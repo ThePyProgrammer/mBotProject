@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include <MeMCore.h>
-#include "constants.h"
+
+#define MOTOR_SPEED 100
 
 // INSERT ALL YOUR MAIN LOOP CODE HERE :)
 MeDCMotor motor1(M1);
