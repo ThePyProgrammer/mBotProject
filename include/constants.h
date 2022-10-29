@@ -20,6 +20,12 @@ MeUltrasonicSensor ultraSensor(PORT_2);
 #define dt 6244
 
 
+// TODO("Get Configuration Values")
+float blackArray[] = {0, 0, 0};
+float whiteArray[] = {0, 0, 0};
+
+
+
 // ============================= READ FUNCTIONS ================================
 /**
  * Get ultrasound sensor distance reading
@@ -38,6 +44,13 @@ float ultraSoundDistance()
  */
 int readIR() {
     return analogRead(IR);
+}
+
+void readLDR() {
+    int reading = analogRead(LDR);
+    // edit to get a value between 0 and 255
+
+
 }
 
 // ============================= ACTION FUNCTIONS ==============================
