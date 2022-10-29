@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include <MeMCore.h>
+#include <unity.h>
 
 double angle_rad = PI / 180.0;
 double angle_deg = 180.0 / PI;
@@ -7,6 +8,7 @@ MeBuzzer buzzer;
 
 void setup()
 {
+    UNITY_BEGIN();
     buzzer.tone(440, 500);
     buzzer.tone(440, 500);
     buzzer.tone(440, 500);
@@ -88,6 +90,7 @@ void setup()
     buzzer.tone(349, 376);
     buzzer.tone(523, 126);
     buzzer.tone(440, 1000);
+    UNITY_END();
 }
 
 void loop()
