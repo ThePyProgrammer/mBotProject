@@ -1,7 +1,6 @@
 #define A A0
 #define B A1
 
-#define IR A2
 #define LDR A3
 
 #define Hi 255
@@ -9,7 +8,7 @@
 
 //Range Scalar for LDR
 float black[3] = {0, 0, 0}; //RGB
-float white[3] = {1, 1, 1}; //RGB
+float delta[3] = {1, 1, 1}; //RGB
 
 void off(){
   analogWrite(B, Lo);
@@ -50,15 +49,15 @@ float blue(long duration){
 
 void getColor(){
     //Red
-    float r = (red(3000) - black[0])/white[0];
+    float r = 255 * (red(5000) - black[0])/delta[0];
     Serial.print("Red: ");
     Serial.println(r);
     //Green
-    float g = (green(3000) - black[1])/white[1];
+    float g = 255 * (green(5000) - black[1])/delta[1];
     Serial.print("Green: ");
     Serial.println(g);
     //Blue
-    float b = (blue(3000) - black[2])/white[2];
+    float b = 255 * (blue(5000) - black[2])/delta[2];
     Serial.print("Blue: ");
     Serial.println(b);
     if (g > r && g > b) Serial.println("Green");
@@ -71,24 +70,24 @@ void calibrate(){
   Serial.println("Show Black");
   delay(3000);
   Serial.println("Reading Black");
-  black[0] = red(3000);
+  black[0] = red(5000);
   Serial.println(black[0]);
-  black[1] = green(3000);
+  black[1] = green(5000);
   Serial.println(black[1]);
-  black[2] = blue(3000);
+  black[2] = blue(5000);
   Serial.println(black[2]);
   Serial.println("Done Reading Black");
 
   //White
   Serial.println("Show White");
-  delay(3000);
+  delay(5000);
   Serial.println("Reading White");
-  white[0] = red(3000);
-  Serial.println(white[0]);
-  white[1] = green(3000);
-  Serial.println(white[1]);
-  white[2] = blue(3000);
-  Serial.println(white[2]);
+  delta[0] = red(5000) - black[0];
+  Serial.println(delta[0]);
+  delta[1] = green(5000) - black[1];
+  Serial.println(delta[1]);
+  delta[2] = blue(5000) - black[2];
+  Serial.println(delta[2]);
   Serial.println("Done Reading White");
 }
 
