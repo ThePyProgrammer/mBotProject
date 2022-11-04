@@ -1,14 +1,25 @@
 #define A A0
 #define B A1
 
+#define IR A2
 #define LDR A3
 
 #define Hi 255
 #define Lo 0
 
 //Range Scalar for LDR
-float black[3] = {0, 0, 0}; //RGB
-float delta[3] = {1, 1, 1}; //RGB
+float black[3] = {527, 776, 764}; //RGB
+float delta[3] = {416, 199, 205}; //RGB
+
+enum Color {
+  WHITE,
+  RED,
+  GREEN,
+  BLUE,
+  ORANGE,
+  PURPLE,
+  BLACK
+} color = BLACK;
 
 void off(){
   analogWrite(B, Lo);
@@ -47,25 +58,38 @@ float blue(long duration){
   return ret;
 }
 
+void decideColor(float r, float g, float b) {
+  r = constrain(ceil(r), 0, 255);
+  g = constrain(ceil(g), 0, 255);
+  b = constrain(ceil(b), 0, 255);
+
+  if (r >= 250 && g >= 250 &&  b >= 250) color = WHITE;
+  else if (r > 250 && g < 150 && b < 130) color = RED;
+  else if (r > 250 && g > 150 && b < 150) color = ORANGE;
+  else if (r < 200 && g > 200 && b > 230) color = BLUE;
+  else if (r < 105 && g > 150 && b > 100) color = GREEN;
+  else if (r > 199 && g < 200 && b > 180) color = PURPLE;
+  else color = BLACK;
+}
+
 void getColor(){
     //Red
-    float r = 255 * (red(5000) - black[0])/delta[0];
+    float r = 255 * (red(1000) - black[0])/delta[0];
     Serial.print("Red: ");
     Serial.println(r);
     //Green
-    float g = 255 * (green(5000) - black[1])/delta[1];
+    float g = 255 * (green(1000) - black[1])/delta[1];
     Serial.print("Green: ");
     Serial.println(g);
     //Blue
-    float b = 255 * (blue(5000) - black[2])/delta[2];
+    float b = 255 * (blue(1000) - black[2])/delta[2];
     Serial.print("Blue: ");
     Serial.println(b);
-    if (g > r && g > b) Serial.println("Green");
-    if (r > g && r > b) Serial.println("Red");
-    if (b > g && b > r) Serial.println("Blue");
+    decideColor(r, g, b);
+    Serial.println(color);
 }
 
-void calibrate(){
+void calibrateBlack(){
   //Black
   Serial.println("Show Black");
   delay(3000);
@@ -77,7 +101,9 @@ void calibrate(){
   black[2] = blue(5000);
   Serial.println(black[2]);
   Serial.println("Done Reading Black");
+}
 
+void calibrateWhite(){
   //White
   Serial.println("Show White");
   delay(5000);
@@ -96,6 +122,7 @@ void loop(){
     
   }
   String command = Serial.readString();
-  if (command == "calibrate\n") calibrate();
+  if (command == "calibrateB\n") calibrateBlack();
+  else if (command == "calibrateW\n") calibrateWhite();
   else if (command == "getColor\n") getColor();
 }

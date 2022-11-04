@@ -14,6 +14,8 @@ MeBuzzer buzzer;
 #define period 2550
 #define frontSpeed 15.73
 #define T 6244
+#define W 20
+#define bgIR 940
 
 #define A A0
 #define B A1
@@ -53,82 +55,6 @@ void playMusic(){
     buzzer.tone(440, 500);
     buzzer.tone(349, 376);
     buzzer.tone(523, 126);
-//
-//    buzzer.tone(440, 500);
-//    buzzer.tone(349, 376);
-//    buzzer.tone(523, 126);
-//    buzzer.tone(440, 1000);
-//
-//    buzzer.tone(659, 500);
-//    buzzer.tone(659, 500);
-//    buzzer.tone(659, 500);
-//    buzzer.tone(698, 376);
-//    buzzer.tone(523, 126);
-//
-//    buzzer.tone(415, 500);
-//    buzzer.tone(349, 376);
-//    buzzer.tone(523, 126);
-//    buzzer.tone(440, 1000);
-//
-//    buzzer.tone(880, 500);
-//    buzzer.tone(440, 376);
-//    buzzer.tone(440, 126);
-//    buzzer.tone(880, 500);
-//    buzzer.tone(831, 376);
-//    buzzer.tone(784, 126);
-//
-//    buzzer.tone(740, 166);
-//    buzzer.tone(698, 166);
-//    buzzer.tone(740, 166);
-//    delay(250);
-//    buzzer.tone(466, 250);
-//    buzzer.tone(622, 500);
-//    buzzer.tone(587, 376);
-//    buzzer.tone(554, 126);
-//
-//    buzzer.tone(523, 166);
-//    buzzer.tone(494, 166);
-//    buzzer.tone(523, 166);
-//    delay(250);
-//    buzzer.tone(349, 250);
-//    buzzer.tone(415, 500);
-//    buzzer.tone(349, 376);
-//    buzzer.tone(415, 126);
-//
-//    buzzer.tone(523, 500);
-//    buzzer.tone(440, 376);
-//    buzzer.tone(523, 126);
-//    buzzer.tone(659, 1000);
-//
-//    buzzer.tone(880, 500);
-//    buzzer.tone(440, 376);
-//    buzzer.tone(440, 126);
-//    buzzer.tone(880, 500);
-//    buzzer.tone(831, 376);
-//    buzzer.tone(784, 126);
-//
-//    buzzer.tone(740, 166);
-//    buzzer.tone(698, 166);
-//    buzzer.tone(740, 166);
-//    delay(250);
-//    buzzer.tone(466, 250);
-//    buzzer.tone(622, 500);
-//    buzzer.tone(587, 376);
-//    buzzer.tone(554, 126);
-//
-//    buzzer.tone(523, 166);
-//    buzzer.tone(494, 166);
-//    buzzer.tone(523, 166);
-//    delay(250);
-//    buzzer.tone(349, 250);
-//    buzzer.tone(415, 500);
-//    buzzer.tone(349, 376);
-//    buzzer.tone(523, 126);
-//
-//    buzzer.tone(440, 500);
-//    buzzer.tone(349, 376);
-//    buzzer.tone(523, 126);
-//    buzzer.tone(440, 1000);
 }
 
 //LDR Things
@@ -189,9 +115,9 @@ void getColor(){
     float b = 255 * (blue(1000) - black[2])/delta[2];
     decideColor(r, g, b);
 }
-
 //End LDR Things
 
+//Movement things
 void rotation(float angle){
   float t = (period/360) * angle;
   float v = t > 0 ? V : -V;
@@ -203,56 +129,54 @@ void rotation(float angle){
   motor2.stop();
 }
 
-float getDistance(){
-  return ultraSensor.distanceCm();
-}
-
 void moveRobot(float distance){
     float t = distance / frontSpeed;
     float v = distance > 0 ? V : -V;
     t = t > 0 ? t : -t;
-    motor1.run(-v*1.25);
-    motor2.run(v*1.25);
+    motor1.run(-v);
+    motor2.run(v);
     delay(1000 * t);
     motor1.stop();
     motor2.stop();
 }
+//End Movement Things
+
+//Ultrasonic sensor function
+float getDistance(){
+  return ultraSensor.distanceCm();
+}
+//End Ultrasonic sensor function
+
+//Solver things
+void solve(){
+  switch(color){
+    case WHITE: playMusic(); break;
+    case RED: rotation(90); break;
+    case GREEN: rotation(-90); break;
+    case ORANGE:
+      //Determine which direction to rotate to prevent collision with wall
+      if (getDistance() > 13) rotation(180);
+      else rotation(-180);
+      break;
+    case BLUE:
+      rotation(-90);
+      moveRobot(W);
+      rotation(-90);
+      break;
+    case PURPLE:
+      rotation(90);
+      moveRobot(W);
+      rotation(90);
+      break;
+    default: break;
+  }
+}
+//End solver things
 
 void setup() {
     Serial.begin(9600);
     off();
     state = moving;
-}
-
-void solve(){
-  switch(color){
-    case WHITE:
-    //Play music
-    playMusic();
-    break;
-    case RED:
-    rotation(90);
-    break;
-    case GREEN:
-    rotation(-90);
-    break;
-    case ORANGE:
-    if (getDistance() > 13) rotation(180);
-    else rotation(-180);
-    break;
-    case BLUE:
-    rotation(-90);
-    moveRobot(19);
-    rotation(-90);
-    break;
-    case PURPLE:
-    rotation(90);
-    moveRobot(18);
-    rotation(90);
-    break;
-    default:
-    break;
-  }
 }
 
 void loop() {
@@ -261,35 +185,35 @@ void loop() {
 
   float IRread = analogRead(IR);
   float UlRead = getDistance();
-
+  
+  bool UlWall = UlRead =< W;
+  bool IRWall = IRread < bgIR;
+  
   //State handler
   if (sensorState == S1_IN_S2_IN) state = solving;
-  else if (UlRead > 13 && UlRead < 20){
-    state = turning;
-    alpha = 5;
+  else if (UlWall){
+    if (UlRead =< 20 && UlRead > 13){
+      state = turning;
+      alpha = 1;
+    }
+    else if (UlRead < 6.5){
+      state = turning;
+      alpha = -1;
+    }
   }
-  else if (UlRead > 20 && (IRread > 930 && IRread < 940)) {
-    state = turning;
-    alpha = 1;
-  }
-  else if (UlRead < 6.5){
+  else if(IRWall && IRread > 930){
     state = turning;
     alpha = -1;
   }
   else state = moving;
 
   switch(state){
-    case moving:
-    moveRobot(unit);
-    break;
+    case moving: moveRobot(unit); break;
     case solving:
-    getColor();
-    solve();
-    break;
-    case turning:
-    rotation(alpha);
-    break;
-    case idle:
-    break;
+      getColor();
+      solve();
+      break;
+    case turning: rotation(alpha); break;
+    case idle: break;
   }
 }

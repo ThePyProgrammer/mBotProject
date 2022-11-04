@@ -23,12 +23,7 @@ float readAvg(int n, long del){
 }
 
 void loop(){
-  if (n % 100000 == 0){
-    curr = readAvg(1, 0);
-    Serial.print(curr);
-    Serial.print(",");
-    if (prev > 0) Serial.println(prev);
-    prev = curr;
-  }
+  curr = analogRead(IR);
+  Serial.println(curr);
   n++;
 }
