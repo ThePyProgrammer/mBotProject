@@ -1,5 +1,5 @@
 // INSERT ALL YOUR MAIN LOOP CODE HERE :)
-
+#include <Arduino.h>
 #include <MeMCore.h>
 
 //Define the Me things
