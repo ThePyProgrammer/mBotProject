@@ -10,9 +10,9 @@ MeLineFollower line(PORT_1);
 MeBuzzer buzzer;
 
 //Some constants
-#define V 150
-#define period 2550
-#define frontSpeed 15.73
+#define V 200
+#define period 1800
+#define frontSpeed 13
 #define T 6244
 #define W 20
 #define bgIR 940
@@ -43,18 +43,20 @@ float unit = 1;
 float alpha = 0;
 
 //Range Scalar for LDR
-float black[3] = {527, 776, 764}; //RGB
-float delta[3] = {416, 199, 205}; //RGB
+float black[3] = {498, 756, 771}; //RGB
+float delta[3] = {437, 214, 197}; //RGB
+
+bool motorRunning = false;
 
 long n = 0;
 robotState state = idle;
 
 void playMusic(){
-    buzzer.tone(440, 500);
-    buzzer.tone(440, 500);
-    buzzer.tone(440, 500);
-    buzzer.tone(349, 376);
-    buzzer.tone(523, 126);
+//    buzzer.tone(440, 500);
+//    buzzer.tone(440, 500);
+//    buzzer.tone(440, 500);
+//    buzzer.tone(349, 376);
+//    buzzer.tone(523, 126);
 }
 
 //LDR Things
@@ -97,7 +99,7 @@ void decideColor(float r, float g, float b) {
   b = constrain(ceil(b), 0, 255);
 
   if (r >= 250 && g >= 250 &&  b >= 250) color = WHITE;
-  else if (r > 250 && g < 150 && b < 130) color = RED;
+  else if (r > 250 && g < 150 && b < 150) color = RED;
   else if (r > 250 && g > 150 && b < 150) color = ORANGE;
   else if (r < 200 && g > 200 && b > 230) color = BLUE;
   else if (r < 105 && g > 150 && b > 100) color = GREEN;
@@ -127,6 +129,22 @@ void rotation(float angle){
   delay(t);
   motor1.stop();
   motor2.stop();
+}
+
+void runMotor(){
+  if (!motorRunning){
+    motorRunning = true;
+    motor1.run(-V);
+    motor2.run(V); 
+  }
+}
+
+void stopMotor(){
+  if (motorRunning){
+    motorRunning = false;
+    motor1.stop();
+    motor2.stop(); 
+  }
 }
 
 void moveRobot(float distance){
@@ -186,34 +204,30 @@ void loop() {
   float IRread = analogRead(IR);
   float UlRead = getDistance();
   
-  bool UlWall = UlRead =< W;
-  bool IRWall = IRread < bgIR;
-  
   //State handler
   if (sensorState == S1_IN_S2_IN) state = solving;
-  else if (UlWall){
-    if (UlRead =< 20 && UlRead > 13){
-      state = turning;
-      alpha = 1;
-    }
-    else if (UlRead < 6.5){
-      state = turning;
-      alpha = -1;
-    }
+  else if (UlRead < 20 && UlRead > 13){
+    state = turning;
+    alpha = 1;
   }
-  else if(IRWall && IRread > 930){
+  else if (UlRead < 6.5){
     state = turning;
     alpha = -1;
+  }
+  else if (UlRead > 20 && IRread > 930){
+    state = turning;
+    alpha = 1;
   }
   else state = moving;
 
   switch(state){
-    case moving: moveRobot(unit); break;
+    case moving: runMotor(); break;
     case solving:
+      stopMotor();
       getColor();
       solve();
       break;
-    case turning: rotation(alpha); break;
-    case idle: break;
+    case turning: stopMotor(); rotation(alpha); break;
+    case idle: stopMotor(); break;
   }
 }

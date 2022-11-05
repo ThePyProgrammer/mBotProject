@@ -8,8 +8,8 @@
 #define Lo 0
 
 //Range Scalar for LDR
-float black[3] = {527, 776, 764}; //RGB
-float delta[3] = {416, 199, 205}; //RGB
+float black[3] = {498, 756, 771}; //RGB
+float delta[3] = {437, 214, 197}; //RGB
 
 enum Color {
   WHITE,
@@ -64,7 +64,7 @@ void decideColor(float r, float g, float b) {
   b = constrain(ceil(b), 0, 255);
 
   if (r >= 250 && g >= 250 &&  b >= 250) color = WHITE;
-  else if (r > 250 && g < 150 && b < 130) color = RED;
+  else if (r > 250 && g < 150 && b < 150) color = RED;
   else if (r > 250 && g > 150 && b < 150) color = ORANGE;
   else if (r < 200 && g > 200 && b > 230) color = BLUE;
   else if (r < 105 && g > 150 && b > 100) color = GREEN;
