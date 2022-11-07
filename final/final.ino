@@ -137,8 +137,8 @@ void runMotor()
     if (!motorRunning)
     {
         motorRunning = true;
-        motor1.run(-V);
-        motor2.run(V);
+        motor1.run(-(V + 55));
+        motor2.run((V + 55)....);
     }
 }
 
@@ -191,12 +191,12 @@ void solve()
         break;
     case BLUE:
         rotation(-90);
-        move(WIDTH);
+        move(WIDTH - 7);
         rotation(-90);
         break;
     case PURPLE:
         rotation(90);
-        move(WIDTH);
+        move(WIDTH - 7);
         rotation(90);
         break;
     default:
@@ -232,7 +232,7 @@ void loop()
         state = turning;
         alpha = -1;
     }
-    else if (UlRead > 20 && IRread > 930)
+    else if (UlRead > 20 && IRread > 970)
     {
         state = turning;
         alpha = 1;
