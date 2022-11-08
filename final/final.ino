@@ -204,9 +204,9 @@ void runMotor()
 {
     if (!motorRunning)
     {
-        motorRunning = true; // Reset value for the sake of consistency
-        motor1.run(-(V + 55)); // Moves a bit faster than the original speed (to speed up the mBot)
-        motor2.run((V + 55)....);
+        motorRunning = true;
+        motor1.run(-(V + 55));
+        motor2.run((V + 55));
     }
 }
 
@@ -318,8 +318,8 @@ void loop()
 
     // State handler
     if (sensorState == S1_IN_S2_IN)
-        state = solving; // just wait for it to solve
-    else if (UlRead < 20 && UlRead > 13)
+        state = solving;
+    else if (UlRead < 16.5 && UlRead > 13)
     {
         state = turning; // note that it's turning
         alpha = 1;       // moving towards ultrasonic sensor (large distance observed)
@@ -329,12 +329,12 @@ void loop()
         state = turning; // note that it's turning
         alpha = -1;      // moving towards IR sensor (small distance observed)
     }
-    else if (UlRead > 20 && IRread > 970)
-    {
-        // (large distance observed from ultrasonic sensor, IR sensor is very close to wall)
-        state = turning; // note that it's turning
-        alpha = 1;       // moving towards ultrasonic sensor
-    }
+    // else if (UlRead > 20 && IRread > 980)
+    // {
+    //     // (large distance observed from ultrasonic sensor, IR sensor is very close to wall)
+    //     state = turning; // note that it's turning
+    //     alpha = 1;       // moving towards ultrasonic sensor
+    // }
     else
         state = moving; // not correcting course
 
