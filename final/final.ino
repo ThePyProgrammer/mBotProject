@@ -138,7 +138,7 @@ void runMotor()
     {
         motorRunning = true;
         motor1.run(-(V + 55));
-        motor2.run((V + 55)....);
+        motor2.run((V + 55));
     }
 }
 
@@ -222,7 +222,7 @@ void loop()
     // State handler
     if (sensorState == S1_IN_S2_IN)
         state = solving;
-    else if (UlRead < 20 && UlRead > 13)
+    else if (UlRead < 16.5 && UlRead > 13)
     {
         state = turning;
         alpha = 1;
@@ -232,11 +232,11 @@ void loop()
         state = turning;
         alpha = -1;
     }
-    else if (UlRead > 20 && IRread > 970)
-    {
-        state = turning;
-        alpha = 1;
-    }
+//    else if (UlRead > 20 && IRread > 980)
+//    {
+//        state = turning;
+//        alpha = 1;
+//    }
     else
         state = moving;
 
