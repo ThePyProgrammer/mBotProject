@@ -321,7 +321,7 @@ void loop()
     // State handler
     if (sensorState == S1_IN_S2_IN)
         state = solving;
-    else if (UlRead < 16.5 && UlRead > 13)
+    else if (UlRead < 20 && UlRead > 13)
     {
         state = turning; // note that it's turning
         alpha = 1;       // moving towards ultrasonic sensor (large distance observed)
