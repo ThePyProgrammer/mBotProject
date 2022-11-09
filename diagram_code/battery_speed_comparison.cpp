@@ -8,7 +8,11 @@ MeDCMotor motor2(M2);
 #define period 1800
 #define WIDTH 20
 
-
+enum rotating
+{
+    ROTATING,
+    IDLE
+} state = IDLE;
 
 void rotate(float angle)
 {
@@ -24,13 +28,15 @@ void rotate(float angle)
     state = IDLE;
 }
 
-void setup(){
+void setup()
+{
     Serial.begin(9600);
 }
 
 void loop()
 {
     int stateButton = analogRead(A7);
-    if (stateButton == 0 && state == IDLE) rotate(90);
+    if (stateButton == 0 && state == IDLE)
+        rotate(90);
     // 1023 is the other state cuz why not bro
 }

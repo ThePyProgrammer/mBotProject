@@ -180,11 +180,11 @@ void getColor()
 // |=================================================================================|
 
 /**
- * rotation: Rotates based on given angle
+ * rotate: Rotates based on given angle
  * 
  * @param angle : Angle (in degrees) leftward
  */
-void rotation(float angle)
+void rotate(float angle)
 {
     // computes time elapsed based on angle given
     float t = (period / 360) * angle;
@@ -278,27 +278,27 @@ void solve()
         playMusic();
         break;
     case RED: // Red Tile
-        rotation(90); // Rotates Left By 90 degrees
+        rotate(90); // Rotates Left By 90 degrees
         break;
     case GREEN: // Green Tile
-        rotation(-90); // Rotates Right by 90 degrees
+        rotate(-90); // Rotates Right by 90 degrees
         break;
     case ORANGE: // Orange Tile
         // Determine which direction to rotate to prevent collision with wall
         if (getUlDist() > 13)
-            rotation(180); // Turns from the left (side with the Ultrasonic Sensor) since the Ultrasonic distance is very large
+            rotate(180); // Turns from the left (side with the Ultrasonic Sensor) since the Ultrasonic distance is very large
         else
-            rotation(-180); // Turns from the right (side with the IR Sensor) since the Ultrasonic distance is smaller
+            rotate(-180); // Turns from the right (side with the IR Sensor) since the Ultrasonic distance is smaller
         break;
     case BLUE: // Light Blue Tile
-        rotation(-90); // Rotates Right by 90 degrees
+        rotate(-90); // Rotates Right by 90 degrees
         move(WIDTH - 7); // Moves forward (does not completely cover the width as rotation is not about the centre)
-        rotation(-90); // Rotates Right by 90 degrees
+        rotate(-90); // Rotates Right by 90 degrees
         break;
     case PURPLE: // Purple Tile
-        rotation(90); // Rotates Left By 90 degrees
+        rotate(90); // Rotates Left By 90 degrees
         move(WIDTH - 7); // Moves forward (does not completely cover the width as rotation is not about the centre)
-        rotation(90); // Rotates Left By 90 degrees
+        rotate(90); // Rotates Left By 90 degrees
         break;
     default: // Undefined Color (ideally "BLACK")
         break;
@@ -352,7 +352,7 @@ void loop()
         break;
     case turning:
         stopMotor(); // stop to course correct
-        rotation(alpha); // rotate by a small angle (1 degree)
+        rotate(alpha); // rotate by a small angle (1 degree)
         break;
     case idle:
         stopMotor(); // just let it stop
