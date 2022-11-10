@@ -84,8 +84,8 @@ bool motorRunning = false;
  */
 void writeLDR(long b, long a)
 {
-    analogWrite(B, b);
-    analogWrite(A, a);
+    analogWrite(B, b); // Write to the MSB
+    analogWrite(A, a); // Write ot the LSB
 }
 
 /**
@@ -205,7 +205,7 @@ void runMotor()
 {
     if (!motorRunning)
     {
-        motorRunning = true;
+        motorRunning = true; // Reset value for the sake of consistency
         motor1.run(-(V + 55));
         motor2.run((V + 55));
     }
@@ -231,12 +231,13 @@ void stopMotor()
  */
 void move(float distance)
 {
+    // computes time elapsed based on the distance given
     float t = distance / SPEED;
-    float v = distance > 0 ? V : -V;
-    t = t > 0 ? t : -t;
+    float v = distance > 0 ? V : -V; // final speed of motor
+    t = t > 0 ? t : -t; // absolute value of time elapsed
     motor1.run(-v);
     motor2.run(v);
-    delay(1000 * t);
+    delay(1000 * t); // convert seconds to milliseconds
     motor1.stop();
     motor2.stop();
 }
@@ -246,7 +247,7 @@ void move(float distance)
 // |=================================================================================|
 
 /**
- * playMusic: Plays Victory Music (Imperial March)
+ * playMusic: Plays Victory Music (Imperial March from "Star Wars")
  */
 void playMusic()
 {
@@ -258,7 +259,7 @@ void playMusic()
 }
 
 /**
- * getUlDist: Get Distance from Ultrasonic Sensor
+ * getUlDist: Get Distance from Ultrasonic Sensor (automated by MakeBlock Library)
  *
  * @return float Distance Measured by Ultrasonic Sensor
  */
